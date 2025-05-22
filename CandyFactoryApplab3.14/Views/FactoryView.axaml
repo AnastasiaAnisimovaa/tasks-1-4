@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CandyFactoryApp.ViewModels"
+             xmlns:local="using:CandyFactoryApp.Converters"
+             x:DataType="vm:FactoryViewModel"
+             x:Class="CandyFactoryApp.Views.FactoryView">
+    
+    <UserControl.Resources>
+    <local:StringIsEqualConverter x:Key="StringIsEqualConverter"/>
+</UserControl.Resources>
+    
+    <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10">
+        <StackPanel Spacing="10">
+            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Spacing="5">
+                    <TextBlock Text="Status:"/>
+                    <TextBlock Text="{Binding Status}" Foreground="Green"/>
+                    
+                    <TextBlock Text="Sugar:" Margin="0,10,0,0"/>
+                    <TextBlock Text="{Binding SugarStatus}"/>
+                    
+                    <TextBlock Text="Candies produced:" Margin="0,10,0,0"/>
+                    <TextBlock Text="{Binding ProductionStatus}"/>
+                    
+                    <Button Content="Add Sugar" Command="{Binding AddSugarCommand}" Margin="0,10,0,0"/>
+                    <Button Content="{Binding Status, StringFormat='{}{0} Production'}" 
+                            Command="{Binding ToggleProductionCommand}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Spacing="5">
+                    <TextBlock Text="Technics:" FontWeight="Bold"/>
+                    <ItemsControl ItemsSource="{Binding Technics}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,5" Padding="5">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Status}"/>
+                                        <Button Content="Stop" Command="{Binding StopWorkingCommand}" 
+                                                IsEnabled="{Binding Status, Converter={StaticResource StringIsEqualConverter}, ConverterParameter=Working}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+            
+            <TextBlock Text="Event Log:" FontWeight="Bold" Margin="0,10,0,0"/>
+            <ListBox ItemsSource="{Binding EventLogs}" Height="100"/>
+        </StackPanel>
+    </Border>
+</UserControl>
